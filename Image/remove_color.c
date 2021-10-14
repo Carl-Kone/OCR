@@ -13,6 +13,16 @@
 
 // int height = image_surface->h;
 
+/*
+ * Function: grayscale
+ * ----------------------------
+ *   takes a surface and returns it in grayscale
+ *
+ *    image : the image of the sudoku loaded in a surface
+ *    .....
+ *
+ *   returns: the surface in grayscale 
+ */
 SDL_Surface* grayscale(SDL_Surface *image)
 {
     int width = image->w;
@@ -36,6 +46,15 @@ SDL_Surface* grayscale(SDL_Surface *image)
     return image;
 }
 
+/*
+ * Function: blackWhite
+ * ----------------------------
+ *   takes and image in grayscale and returns it in black and white
+ *
+ *    image = the surface from the image in grayscale
+ *
+ *   returns: the surface of the image in black and white
+ */
 SDL_Surface* blackWhite(SDL_Surface *image)
 {
     int width = image->w;
