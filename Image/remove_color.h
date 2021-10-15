@@ -1,6 +1,7 @@
 #ifndef REMOVE_COLOR_H
 #define REMOVE_COLOR_H
 
+#include <stdlib.h>
 #include <SDL.h>
 
 SDL_Surface* grayscale(SDL_Surface *image);
