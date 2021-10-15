@@ -36,10 +36,7 @@ SDL_Surface* grayscale(SDL_Surface *image)
             pixel = get_pixel(image, x, y);
             SDL_GetRGB(pixel, image->format, &r, &g, &b);
             av = 0.3 * r + 0.59 * g + 0.11 * b;
-            r = av;
-            g = av;
-            b = av;
-            pixel = SDL_MapRGB(image->format, r, g, b);
+            pixel = SDL_MapRGB(image->format, av, av, av);
             put_pixel(image, x, y, pixel);
         }
     }
@@ -70,16 +67,12 @@ SDL_Surface* blackWhite(SDL_Surface *image)
             if(r < 128)
             {
                 r = 0;
-                g = 0;
-                b = 0;
             }
             else 
             {
                 r = 255;
-                g = 255;
-                b = 255;
             }
-            pixel = SDL_MapRGB(image->format, r, g, b);
+            pixel = SDL_MapRGB(image->format, r, r, r);
             put_pixel(image, x, y, pixel);
         }
     } 
