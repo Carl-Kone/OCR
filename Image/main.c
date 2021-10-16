@@ -1,7 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "SDL2/SDL.h"
-#include "remove_color.h"
+#include <err.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
+#include "pixel_operations.h"
+#include "gaussian_filter.h"
 
 void init_sdl()
 {
@@ -11,7 +12,16 @@ void init_sdl()
         errx(1,"Could not initialize SDL: %s.\n", SDL_GetError());
 }
 
-SDL_Surface* load_image(char *path)
+/*
+ * Function: loadImage
+ * ----------------------------
+ *   loads an image
+ *
+ *    path: the path to the image
+ *
+ *   returns: a surface
+ */
+SDL_Surface *loadImage(char *path)
 {
     SDL_Surface *img;
 
@@ -65,6 +75,47 @@ void wait_for_keypressed()
     } while(event.type != SDL_KEYUP);
 }
 
+SDL_Surface* display_image(SDL_Surface *img)
+{
+    SDL_Surface *screen;
+
+    // Set the window to the same size as the image
+    screen = SDL_SetVideoMode(img->w, img->h, 0, SDL_SWSURFACE|SDL_ANYFORMAT);
+    if (screen == NULL)
+    {
+        // error management
+        errx(1, "Couldn't set %dx%d video mode: %s\n",
+                img->w, img->h, SDL_GetError());
+    }
+
+    // Blit onto the screen surface
+    if(SDL_BlitSurface(img, NULL, screen, NULL) < 0)
+        warnx("BlitSurface error: %s\n", SDL_GetError());
+
+    // Update the screen
+    SDL_UpdateRect(screen, 0, 0, img->w, img->h);
+
+    // return the screen for further uses
+    return screen;
+}
+
+void wait_for_keypressed()
+{
+    SDL_Event event;
+
+    // Wait for a key to be down.
+    do
+    {
+        SDL_PollEvent(&event);
+    } while(event.type != SDL_KEYDOWN);
+
+    // Wait for a key to be up.
+    do
+    {
+        SDL_PollEvent(&event);
+    } while(event.type != SDL_KEYUP);
+}
+
 /*
  * Function: main
  * ----------------------------
@@ -73,13 +124,16 @@ void wait_for_keypressed()
  *
  *   returns: 0 I think
  */
-int main(int argc, char **argv)
+int main(void)
 {
     init_sdl();
     SDL_Surface *image = loadImage("image.jpg");
     SDL_Surface *n_image = grayscale(image);
-    image = *blackWhite(n_image);
-    SDL_SaveBMP(image, "image2.jpg");
+    SDL_SaveBMP(n_image, "image_gray.jpg");
+    image = blackWhite(n_image);
+    SDL_SaveBMP(image, "imageBW.jpg");
+    n_image = Filter(image);
+    SDL_SaveBMP(n_image, "image_gauss.jpg");
     SDL_FreeSurface(image);
     SDL_FreeSurface(n_image);
 }
