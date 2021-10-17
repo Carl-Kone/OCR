@@ -188,11 +188,12 @@ int create_architecture()
     }
 
     printf(" - Layers created\n");
+    printf("\n");
 
     // Initialize the weights
     if(initialize_weights() != 0)
     {
-        printf("Error Initilizing weights...\n");
+        printf("Error\n");
         return 1;
     }
 
@@ -214,7 +215,8 @@ int initialize_weights(void)
 {
     int i,j,k;
 
-    printf(" - Assigning random weights\n");
+    printf(" - Assigning weights\n");
+    printf("\n");
 
     for(i=0;i<num_layers-1;i++)
     {
@@ -227,7 +229,7 @@ int initialize_weights(void)
                 lay[i].neu[j].out_weights[k] = ((double)rand())/((double)RAND_MAX);
                 lay[i].neu[j].dw[k] = 0.0;
 
-                printf(" -> Random weight : %f\n", lay[i].neu[j].out_weights[k]);
+                printf("  ->  Weight : %f\n", lay[i].neu[j].out_weights[k]);
             }
 
             if(i>0) 
