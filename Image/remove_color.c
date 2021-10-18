@@ -1,4 +1,7 @@
 #include "pixel_operations.h"
+#include <err.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 
 // Uint32 pixel = get_pixel(image_surface, x, y);
 
