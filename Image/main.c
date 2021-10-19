@@ -128,11 +128,10 @@ int main(void)
 {
     init_sdl();
     SDL_Surface *image = loadImage("image.jpg");
+    SDL_Surface *n_image = *image;
     grayscale(image);
-    SDL_SaveBMP(n_image, "image_gray.jpg");
-    image = blackWhite(n_image);
-    SDL_SaveBMP(image, "imageBW.jpg");
-    n_image = Filter(image);
+    SDL_SaveBMP(image, "image_gray.jpg");
+    filter(image, n_image);
     SDL_SaveBMP(n_image, "image_gauss.jpg");
     SDL_FreeSurface(image);
 }
