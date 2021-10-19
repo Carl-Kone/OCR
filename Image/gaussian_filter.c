@@ -49,9 +49,8 @@ Uint32 updatePixel(Uint32 image[])
  *
  *   returns: should return the image with the noise removed
  */
-SDL_Surface* Filter(SDL_Surface* image)
+void filter(SDL_Surface* image, SDL_Surface* n_image)
 {
-    SDL_Surface* n_image = image;
     int width = image->w;
     int height = image->h;
     Uint32 pixel;
@@ -73,5 +72,4 @@ SDL_Surface* Filter(SDL_Surface* image)
             put_pixel(n_image, x, y, pixel);
         }
     }
-    return n_image;
 }
