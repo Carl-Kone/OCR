@@ -54,6 +54,7 @@ void grayscale(SDL_Surface *image)
  *
  *   returns: the surface of the image in black and white
  */
+/*
 SDL_Surface* blackWhite(SDL_Surface *image)
 {
     int width = image->w;
@@ -79,4 +80,4 @@ SDL_Surface* blackWhite(SDL_Surface *image)
         }
     } 
     return image;  
-}
+}*/
