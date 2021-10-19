@@ -26,7 +26,7 @@
  *
  *   returns: the surface in grayscale 
  */
-SDL_Surface* grayscale(SDL_Surface *image)
+void grayscale(SDL_Surface *image)
 {
     int width = image->w;
     int height = image->h;
@@ -43,7 +43,6 @@ SDL_Surface* grayscale(SDL_Surface *image)
             put_pixel(image, x, y, pixel);
         }
     }
-    return image;
 }
 
 /*
