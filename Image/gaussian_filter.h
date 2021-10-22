@@ -6,6 +6,6 @@
 
 void updateKernel();
 Uint32 updatePixel(Uint32 image[]);
-SDL_Surface* Filter(SDL_Surface* image);
+void filter(SDL_Surface* image, SDL_Surface* n_image);
 
 #endif

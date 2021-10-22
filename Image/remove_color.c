@@ -1,4 +1,7 @@
 #include "pixel_operations.h"
+#include <err.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 
 // Uint32 pixel = get_pixel(image_surface, x, y);
 
@@ -23,7 +26,7 @@
  *
  *   returns: the surface in grayscale 
  */
-SDL_Surface* grayscale(SDL_Surface *image)
+void grayscale(SDL_Surface *image)
 {
     int width = image->w;
     int height = image->h;
@@ -40,7 +43,6 @@ SDL_Surface* grayscale(SDL_Surface *image)
             put_pixel(image, x, y, pixel);
         }
     }
-    return image;
 }
 
 /*
@@ -52,6 +54,7 @@ SDL_Surface* grayscale(SDL_Surface *image)
  *
  *   returns: the surface of the image in black and white
  */
+/*
 SDL_Surface* blackWhite(SDL_Surface *image)
 {
     int width = image->w;
@@ -77,4 +80,4 @@ SDL_Surface* blackWhite(SDL_Surface *image)
         }
     } 
     return image;  
-}
+}*/

@@ -26,17 +26,17 @@ void updateKernel()
  *
  *   returns: a new pixel value 
  */
-Uint32 updatePixel(Uint32 image[])
+Uint8 updatePixel(Uint8 image[])
 {
-    Uint32 pixel = 0;
+    Uint8 pixel = 0;
     // multiplication of the values of the pixels with the kernel values
-    for(i = 0; i < size_k; i++)
+    for(size_t i = 0; i < size_k; i++)
     {
-        pixel += (image[i] * kernel[i]);
+        pixel += (image[i] * kernel[i]); // check the color of pixel u stoopid
     }
     // average =  new value of pixel
     pixel = pixel/maxval;
-    return pixel;
+    return (Uint8) pixel;
 }
 
 /*
@@ -49,29 +49,32 @@ Uint32 updatePixel(Uint32 image[])
  *
  *   returns: should return the image with the noise removed
  */
-SDL_Surface* Filter(SDL_Surface* image)
+void filter(SDL_Surface* image, SDL_Surface* n_image)
 {
-    SDL_Surface* n_image = image;
+    updateKernel();
     int width = image->w;
     int height = image->h;
     Uint32 pixel;
-    Uint32 pixels[25];
+    Uint8 pixels[25]; 
+    Uint8 r, g, b;
     int i;
     for(int y = 2; y < height-2; y++)
     {
         for(int x = 2; x < width-2; x++)
         {
             i = 0;
-            for(int b = y-2; b <= y+2; b++)
+            for(int c = y-2; c <= y+2; c++)
             {
                 for(int a = x-2; a <= x+2; a++)
                 {
-                    pixels[i] = get_pixel(image, a, b);
+                    pixel = get_pixel(image, a, c);
+                    SDL_GetRGB(pixel, image->format, &r, &g, &b);
+                    pixels[i] = r;
+                    i++;
                 }
             }
             pixel = updatePixel(pixels);
             put_pixel(n_image, x, y, pixel);
         }
     }
-    return n_image;
 }
