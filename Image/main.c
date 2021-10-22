@@ -1,7 +1,9 @@
 #include <err.h>
+#include <stdio.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "pixel_operations.h"
+#include "remove_color.h"
 #include "gaussian_filter.h"
 
 void init_sdl()
@@ -128,10 +130,18 @@ int main(void)
 {
     init_sdl();
     SDL_Surface *image = loadImage("image.jpg");
-    SDL_Surface *n_image = *image;
+    SDL_Surface *n_image = display_image(image);
+    SDL_Surface *bimage = image;
     grayscale(image);
-    SDL_SaveBMP(image, "image_gray.jpg");
-    filter(image, n_image);
-    SDL_SaveBMP(n_image, "image_gauss.jpg");
-    SDL_FreeSurface(image);
+    wait_for_keypressed();
+    update_surface(n_image, image);
+    wait_for_keypressed();
+    //SDL_FreeSurface(image);
+    filter(image, bimage);
+    update_surface(n_image, bimage);
+    wait_for_keypressed();
+    SDL_FreeSurface(n_image);
+    SDL_FreeSurface(bimage);
+    printf("la fonction va jusqu'au bout\n");
+    return 0;
 }
