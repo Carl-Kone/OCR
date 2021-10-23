@@ -10,7 +10,7 @@
  *
  *   returns: created neuron
  */
-neuron create_neuron(int num_out_weights)
+neuron create_neuron(size_t num_out_weights)
 {
 	neuron neu;
 
@@ -37,7 +37,7 @@ neuron create_neuron(int num_out_weights)
  *
  *   returns: created layer
  */
-layer create_layer(int number_of_neurons)
+layer create_layer(size_t number_of_neurons)
 {
 	layer lay;
 	lay.num_neu = -1;

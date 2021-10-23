@@ -1,26 +1,25 @@
-#include "backpropagation.h"
 #include "neuralnetwork.h"
 
 
 layer *lay = NULL;
-int num_layers;
-int *num_neurons;
-float alpha;
+size_t num_layers;
+size_t *num_neurons;
+float learning_rate;
 float *cost;
 float full_cost;
 float **input;
 float **desired_outputs;
-int num_training_ex;
-int n=1;
+size_t num_training_ex;
+size_t n=1;
 
 int main(void)
 {
-    int i;
+    size_t i;
 
     num_layers = 3;
 
-    num_neurons = (int*) malloc(num_layers * sizeof(int));
-    memset(num_neurons,0,num_layers *sizeof(int));
+    num_neurons = (size_t*) malloc(num_layers * sizeof(size_t));
+    memset(num_neurons,0,num_layers *sizeof(size_t));
 
     // Get number of neurons per layer
     num_neurons[0] = 2;
@@ -36,7 +35,7 @@ int main(void)
         exit(0);
     }
 
-    alpha = 0.30;
+    learning_rate = 0.30;
 
     num_training_ex = 4;
     printf("\n");
@@ -60,18 +59,18 @@ int main(void)
     get_inputs();
 
     // Get Output Labels
-    get_desired_outputs();
+    get_xor_outputs();
 
     train_neural_net();
-    test_nn();
+    test_neuralnetwork();
 
     return 0;
 }
 
 
-int init()
+size_t init()
 {
-    if(create_architecture() != 0) 
+    if(create_network() != 0) 
     {
         return 1;
     }
@@ -105,7 +104,7 @@ void  get_inputs()
 }
 
 /*
- * Function: get_desired_outputs()
+ * Function: get_xor_outputs()
  * ----------------------------
  *   Ask desired outputs to user
  *
@@ -114,18 +113,18 @@ void  get_inputs()
  *
  *   returns: -
  */
-void get_desired_outputs()
+void get_xor_outputs()
 {
-    printf("Enter the output corresponding to the intput: %s \n","0 0");
+    printf("Enter the output corresponding to the size_tput: %s \n","0 0");
     scanf("%f",&desired_outputs[0][0]);
     printf("\n");
-    printf("Enter the output corresponding to the intput: %s \n","0 1");
+    printf("Enter the output corresponding to the size_tput: %s \n","0 1");
     scanf("%f",&desired_outputs[1][0]);
     printf("\n");
-    printf("Enter the output corresponding to the intput: %s \n","1 0");
+    printf("Enter the output corresponding to the size_tput: %s \n","1 0");
     scanf("%f",&desired_outputs[2][0]);
     printf("\n");
-    printf("Enter the output corresponding to the intput: %s \n","1 1");
+    printf("Enter the output corresponding to the size_tput: %s \n","1 1");
     scanf("%f",&desired_outputs[3][0]);
     printf("\n");
 }
@@ -140,9 +139,9 @@ void get_desired_outputs()
  *
  *   returns: WHAT IT RETURNs
  */
-void feed_input(int i)
+void feed_input(size_t i)
 {
-    int j;
+    size_t j;
 
     for(j=0;j<num_neurons[0];j++)
     {
@@ -151,7 +150,7 @@ void feed_input(int i)
 }
 
 /*
- * Function: create_architecture
+ * Function: create_network
  * ----------------------------
  *   creates the network
  *   allocates memory
@@ -162,17 +161,17 @@ void feed_input(int i)
  *
  *   returns: 0
  */
-int create_architecture()
+size_t create_network()
 {
     printf("---Creating Neural Network---\n");
     printf("\n");
 
-    int i=0,j=0;
+    size_t i=0,j=0;
     lay = (layer*) malloc(num_layers * sizeof(layer));
 
     for(i=0;i<num_layers;i++)
     {
-        lay[i] = create_layer(num_neurons[i]);      
+        lay[i] = create_layer(num_neurons[i]);
         lay[i].num_neu = num_neurons[i];
 
         for(j=0;j<num_neurons[i];j++)
@@ -211,9 +210,22 @@ int create_architecture()
  *
  *   returns: 0
  */
-int initialize_weights(void)
+/*
+void load_weights()
 {
-    int i,j,k;
+    FILE* fptr = fopen("saved_weights", "r");
+    char line[6];
+
+    while (fgets(line, sizeof(line), fptr)) 
+    {
+        printf("%s", line); 
+    }
+    fclose(fptr);
+}
+*/
+size_t initialize_weights(void)
+{
+    size_t i,j,k;
 
     printf(" - Assigning weights\n");
     printf("\n");
@@ -263,8 +275,8 @@ int initialize_weights(void)
  */
 void train_neural_net(void)
 {
-    int i;
-    int it=0;
+    size_t i;
+    size_t it=0;
 
     // Gradient Descent
     for(it=0;it<20000;it++)
@@ -272,9 +284,9 @@ void train_neural_net(void)
         for(i=0;i<num_training_ex;i++)
         {
             feed_input(i);
-            forward_prop_train();
+            forward_propagation_train();
             compute_cost(i);
-            back_prop(i);
+            b_propagation(i);
             update_weights();
         }
     }
@@ -298,7 +310,7 @@ void train_neural_net(void)
  */
 void update_weights(void)
 {
-    int i,j,k;
+    size_t i,j,k;
 
     for(i=0;i<num_layers-1;i++)
     {
@@ -307,19 +319,19 @@ void update_weights(void)
             for(k=0;k<num_neurons[i+1];k++)
             {
                 // Update Weights
-                lay[i].neu[j].out_weights[k] = (lay[i].neu[j].out_weights[k]) - (alpha * lay[i].neu[j].dw[k]);
+                lay[i].neu[j].out_weights[k] = (lay[i].neu[j].out_weights[k]) - (learning_rate * lay[i].neu[j].dw[k]);
                 printf("Updated weight => %f\n", lay[i].neu[j].out_weights[k]);
                 printf("\n");
             }
             
             // Update Bias
-            lay[i].neu[j].bias = lay[i].neu[j].bias - (alpha * lay[i].neu[j].dbias);
+            lay[i].neu[j].bias = lay[i].neu[j].bias - (learning_rate * lay[i].neu[j].dbias);
         }
     }   
 }
 
 /*
- * Function: forward_prop_train
+ * Function: forward_propagation_train
  * ----------------------------
  *    This version is for the training
  *    Calls for activations function
@@ -331,9 +343,9 @@ void update_weights(void)
  *
  *   returns: -
  */
-void forward_prop_train(void)
+void forward_propagation_train(void)
 {
-    int i,j,k;
+    size_t i,j,k;
 
     for(i=1;i<num_layers;i++)
     {   
@@ -370,7 +382,7 @@ void forward_prop_train(void)
 }
 
 /*
- * Function: forward_prop
+ * Function: forward_propagation
  * ----------------------------
  *   same as above
  *
@@ -379,9 +391,9 @@ void forward_prop_train(void)
  *
  *   returns: -
  */
-void forward_prop(void)
+void forward_propagation(void)
 {
-    int i,j,k;
+    size_t i,j,k;
 
     for(i=1;i<num_layers;i++)
     {   
@@ -412,11 +424,29 @@ void forward_prop(void)
             else
             {
                 lay[i].neu[j].actv = 1/(1+exp(-lay[i].neu[j].z));
-                printf("Output: %d\n", (int)round(lay[i].neu[j].actv));
+                printf("Output: %zu\n", (size_t)round(lay[i].neu[j].actv));
                 printf("\n");
             }
         }
     }
+
+    //save weights
+    FILE *fptr = fopen("saved weights", "w");
+    if(fptr == NULL)
+    {
+        errx(1, "ERROR: The file was not created");
+    }
+    for(i=0;i<num_layers-1;i++)
+    {
+        for(j=0;j<num_neurons[i];j++)
+        {
+            for(k=0;k<num_neurons[i+1];k++)
+            {
+                fprintf(fptr,"%f\n", lay[i].neu[j].out_weights[k]);
+            }
+        }
+    }
+    fclose(fptr);
 }
 
 /*
@@ -430,9 +460,9 @@ void forward_prop(void)
  *
  *   returns: -
  */
-void compute_cost(int i)
+void compute_cost(size_t i)
 {
-    int j;
+    size_t j;
     float tmpcost=0;
     float tcost=0;
 
@@ -448,7 +478,7 @@ void compute_cost(int i)
 }
 
 /*
- * Function: back_prop
+ * Function: b_propagation
  * ----------------------------
  *   Fast way of computing the cost function
  *
@@ -457,9 +487,9 @@ void compute_cost(int i)
  *
  *   returns: -
  */
-void back_prop(int p)
+void b_propagation(size_t p)
 {
-    int i,j,k;
+    size_t i,j,k;
 
     // Output Layer
     for(j=0;j<num_neurons[num_layers-1];j++)
@@ -472,7 +502,7 @@ void back_prop(int p)
             lay[num_layers-2].neu[k].dactv = lay[num_layers-2].neu[k].out_weights[j] * lay[num_layers-1].neu[j].dz;
         }
             
-        lay[num_layers-1].neu[j].dbias = lay[num_layers-1].neu[j].dz;           
+        lay[num_layers-1].neu[j].dbias = lay[num_layers-1].neu[j].dz;
     }
 
     // Hidden Layers
@@ -491,8 +521,7 @@ void back_prop(int p)
 
             for(k=0;k<num_neurons[i-1];k++)
             {
-                lay[i-1].neu[k].dw[j] = lay[i].neu[j].dz * lay[i-1].neu[k].actv;    
-                
+                lay[i-1].neu[k].dw[j] = lay[i].neu[j].dz * lay[i-1].neu[k].actv;
                 if(i>1)
                 {
                     lay[i-1].neu[k].dactv = lay[i-1].neu[k].out_weights[j] * lay[i].neu[j].dz;
@@ -505,7 +534,7 @@ void back_prop(int p)
 }
 
 /*
- * Function: test_nn
+ * Function: test_neuralnetwork
  * ----------------------------
  *   Called after the training,
  *   Test values of outputs according to inputs
@@ -515,10 +544,10 @@ void back_prop(int p)
  *
  *   returns: -
  */
-void test_nn(void) 
+void test_neuralnetwork(void) 
 {
-    int i;
-    for(int j = 0; j < 6; j++)
+    size_t i;
+    for(size_t j = 0; j < 6; j++)
     {
         printf("Input:\n");
 
@@ -526,7 +555,8 @@ void test_nn(void)
         {
             scanf("%f",&lay[0].neu[i].actv);
         }
-        forward_prop();
+        forward_propagation();
     }
+    printf("Weights successfully saved\n");
+    //load_weights();
 }
-
