@@ -431,7 +431,7 @@ void forward_propagation(void)
     }
 
     //save weights
-    FILE *fptr = fopen("saved weights", "w");
+    FILE *fptr = fopen("saved_weights", "w");
     if(fptr == NULL)
     {
         errx(1, "ERROR: The file was not created");
@@ -559,4 +559,11 @@ void test_neuralnetwork(void)
     }
     printf("Weights successfully saved\n");
     //load_weights();
+
+    //free mem
+    free(num_neurons);
+    free(input);
+    free(desired_outputs);
+    free(cost);
+    free(lay);
 }
