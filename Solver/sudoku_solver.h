@@ -14,6 +14,7 @@ void solve(void);
 int solve_rec(int x, int y);
 void SetNextCoords(int *nextX, int *nextY);
 const char * grid_to_string(void);
+int str_is_equal(const char *a, const char *b);
 
 
 #endif /* sudoku_solver_h */
