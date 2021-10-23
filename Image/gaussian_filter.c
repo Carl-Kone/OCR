@@ -3,9 +3,9 @@
 #include "pixel_operations.h"
 #include "gaussian_filter.h"
 
-float kernel[] = {2, 4, 5, 4, 2, 4, 9, 12, 9, 4, 5, 12, 15, 12, 5, 4, 9, 12, 9, 4, 2, 4, 5, 4, 2}; 
+Uint8 kernel[] = {2, 4, 5, 4, 2, 4, 9, 12, 9, 4, 5, 12, 15, 12, 5, 4, 9, 12, 9, 4, 2, 4, 5, 4, 2}; 
 size_t size_k = 25;
-float maxval = 160;
+Uint8 maxval = 160;
 
 // updates the kernel with its exact values 
 void updateKernel()
@@ -26,17 +26,19 @@ void updateKernel()
  *
  *   returns: a new pixel value 
  */
-Uint8 updatePixel(Uint8 image[])
+int updatePixel(Uint8 image[])
 {
-    Uint8 pixel = 0;
+    int pixel = 0;
+    int var = 0;
     // multiplication of the values of the pixels with the kernel values
     for(size_t i = 0; i < size_k; i++)
     {
-        pixel += (image[i] * kernel[i]); // check the color of pixel u stoopid
+        val = (image[i] * kernel[i]);
+        pixel += val;
     }
     // average =  new value of pixel
     pixel = pixel/maxval;
-    return (Uint8) pixel;
+    return pixel;
 }
 
 /*
@@ -51,7 +53,7 @@ Uint8 updatePixel(Uint8 image[])
  */
 void filter(SDL_Surface* image, SDL_Surface* n_image)
 {
-    updateKernel();
+    //updateKernel();
     int width = image->w;
     int height = image->h;
     Uint32 pixel;
@@ -73,7 +75,8 @@ void filter(SDL_Surface* image, SDL_Surface* n_image)
                     i++;
                 }
             }
-            pixel = updatePixel(pixels);
+            r = updatePixel(pixels);
+            pixel = SDL_MapRGB(image->format, r, r, r);        
             put_pixel(n_image, x, y, pixel);
         }
     }
