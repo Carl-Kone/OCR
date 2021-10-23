@@ -17,4 +17,3 @@ const char * grid_to_string(void);
 
 
 #endif /* sudoku_solver_h */
-
