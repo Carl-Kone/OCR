@@ -290,8 +290,36 @@ int solve_rec(int x, int y)
     
 }
 
+const char * grid_to_string(void)
+{
+    static char res[110] ="";
+    int k = 0;
+    for(int i = 0; i < GRID_SIZE; i++)
+    {
+        for(int j = 0; j < GRID_SIZE; j++)
+        {
+            res[k] = grid[i][j] + '0';
+            if ( j == 2 || j == 5)
+            {
+                res[k + 1] = ' ';
+                k+=2;
+            }
+            else
+                k++;
+        }
+        res[k] = '\n';
+        if( i == 2 || i == 5)
+        {
+            res[k + 1] = '\n';
+            k += 2;
+        }
+        else
+            k++;
+    }
+    return res;
+}
+
 void solve()
 {
     solve_rec(0,0);
 }
-

@@ -28,14 +28,12 @@ int main(int argc, const char * argv[])
     initialise_grid(res);
     solve();
     print();
-    
     res = grid_to_string();
    
     
     // store it in a file
-   grid_write(res,path);
+    grid_write(res,path);
     
     
     return 0;
-    
 }

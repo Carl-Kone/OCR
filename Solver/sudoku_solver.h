@@ -1,4 +1,3 @@
-
 #ifndef sudoku_solver_h
 #define sudoku_solver_h
 
@@ -18,3 +17,4 @@ const char * grid_to_string(void);
 
 
 #endif /* sudoku_solver_h */
+
