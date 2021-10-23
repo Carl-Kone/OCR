@@ -35,11 +35,11 @@ int main(int argc, const char * argv[])
         printf("SOLVED GRID BELOW:-------------------------------------------------- \n\n");
         print();
         printf("--------------------------------------------------------------------\n");
-        printf("Storing the grid in a file....................\n\n");
+        printf("Storing the grid in a file------------------------------------------\n\n");
         
     }
     // store it in a file
-    grid_write(res,path);
+    grid_write(solve,path);
     
     return 0;
 }

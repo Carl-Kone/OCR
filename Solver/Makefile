@@ -14,6 +14,7 @@ main.o: grid_write.h grid_read.h sudoku_solver.h
 clean:
 	rm -f *.o
 	rm -f *.d
+	rm -f *.result
 	rm -f ${DEP}
 	rm -f ${PRG}
 
