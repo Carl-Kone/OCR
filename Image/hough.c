@@ -43,3 +43,53 @@ int houghTransform(SDL_Surface* image, int** accumulator)
     }
     return r_max;
 }
+
+/*
+  accumulator : a matrix with the values of rho and teta
+  rows : the maximum number of rows of the matrix
+  cols : the maximum number of columns of the matrix
+  coord : the coordinates of maximum value in accumulator matrix = values of rho and theta for each line of the sudoku => polar coordinates
+  -------------
+  returns : the len of coord
+*/
+int coordinates(int** accumulator, int rows, int cols, int* coord)
+{
+    int max = 0;
+    int i = 0;
+    for(size_t j = 0; j < rows; j++)
+    {
+        for(size_t i = 0; i < cols; i++)
+        {
+            if(accumulator[j][i] > max)
+                max = accumulator[j][i];
+        }
+    }
+    for(size_t y = 0; y < rows; y++)
+    {
+        for(size_t x = 0; x < cols; x++)
+        {
+            if(accumulator[j][i] == max)
+            {
+                // can I create a array of tuples for the coordinates? or am I supposed to create a structure?
+                coord[i] = (j, i);
+                i++;
+            }
+        }
+    }
+    return i;
+}
+
+/*
+  image : the image on which we applied the hough function
+  accumulator : a matrix with the values of rho and teta
+  rows : the maximum number of rows of the matrix
+  cols : the maximum number of columns of the matrix
+  coord : coordinates of the maximum value in the accumulator = values of rho and theta are the polar coordinates of a line
+  size_c : length of coordinates array
+*/
+void drawHough(SDL_Surface* image, int** accumulator, int rows, int cols, int* coord, int size_c) 
+{
+    int x, y;
+    double rho, rad;
+    // j'ai plus d'idees, il est 7h je vais me coucher
+}
