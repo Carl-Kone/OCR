@@ -5,6 +5,7 @@
 #include "pixel_operations.h"
 #include "remove_color.h"
 #include "gaussian_filter.h"
+#include "rotate_image.h"
 
 void init_sdl()
 {
@@ -139,6 +140,8 @@ int main(void)
     //SDL_FreeSurface(image);
     filter(image, bimage);
     update_surface(n_image, bimage);
+    wait_for_keypressed();
+    rotate_image(image,45); // rotates the image at angle 45 degrees
     wait_for_keypressed();
     SDL_FreeSurface(n_image);
     SDL_FreeSurface(bimage);
