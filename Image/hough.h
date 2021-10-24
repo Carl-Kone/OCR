@@ -7,5 +7,6 @@
 
 double to_radian(int degree);
 int houghTransform(SDL_Surface* image, int** accumulator);
+int maxVal(int** accumulator, int rows, int cols)
 
 #endif
