@@ -1,7 +1,10 @@
 #include <err.h>
 #include <math.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
 #include "pixel_operations.h"
 #include "hough.h"
+#include "display.h"
 
 // converts degree to radian
 double to_radian(int degree)
@@ -13,7 +16,7 @@ double to_radian(int degree)
   image : sobel image
   accumulator : matrix to store the coordinates of the lines
 */
-int houghTransform(SDL_Surface* image, int** accumulator)
+void houghTransform(SDL_Surface* image, int accumulator[][181])
 {
     int width = image->w;
     int height = image->h;
@@ -32,16 +35,16 @@ int houghTransform(SDL_Surface* image, int** accumulator)
             // enter if the pixel is white
             if(r == 255)
             {
-                for(int theta = 0; theta < 180; ++theta)
+                for(int theta = 0; theta < 181; ++theta)
                 {
                     rad = to_radian(theta);
                     rho = x * cos(rad) + y * sin(rad);
+                    // +1 in accumulator for each theta for each point
                     accumulator[(int) rho + r_max][theta] += 1;
                 }
             }
         }
     }
-    return r_max;
 }
 
 /*
@@ -52,31 +55,28 @@ int houghTransform(SDL_Surface* image, int** accumulator)
   -------------
   returns : the len of coord
 */
-int coordinates(int** accumulator, int rows, int cols, int* coord)
+void coordinates(int accumulator[][181], int rows, int cols)
 {
     int max = 0;
-    int i = 0;
-    for(size_t j = 0; j < rows; j++)
+    for(int j = 0; j < rows; j++)
     {
-        for(size_t i = 0; i < cols; i++)
+        for(int i = 0; i < cols; i++)
         {
             if(accumulator[j][i] > max)
                 max = accumulator[j][i];
         }
     }
-    for(size_t y = 0; y < rows; y++)
+    for(int y = 0; y < rows; y++)
     {
-        for(size_t x = 0; x < cols; x++)
+        for(int x = 0; x < cols; x++)
         {
-            if(accumulator[j][i] == max)
+            if(accumulator[y][x] != max)
             {
                 // can I create a array of tuples for the coordinates? or am I supposed to create a structure?
-                coord[i] = (j, i);
-                i++;
+                accumulator[y][x] = 0;
             }
         }
     }
-    return i;
 }
 
 /*
@@ -86,10 +86,44 @@ int coordinates(int** accumulator, int rows, int cols, int* coord)
   cols : the maximum number of columns of the matrix
   coord : coordinates of the maximum value in the accumulator = values of rho and theta are the polar coordinates of a line
   size_c : length of coordinates array
-*/
-void drawHough(SDL_Surface* image, int** accumulator, int rows, int cols, int* coord, int size_c) 
+
+void drawHough(SDL_Surface* image, int** accumulator, int rows, int cols)
 {
     int x, y;
     double rho, rad;
     // j'ai plus d'idees, il est 7h je vais me coucher
+}
+*/
+
+void HoughMain(SDL_Surface* image)
+{
+    int width = image->w;
+    int height = image->h;
+    int rho = (int) sqrt(width * width + height * height);
+    int w = 181;
+    int h = 2*rho+1;
+    int accumulator[h][w];
+    for(int j = 0; j < h; j++)
+    {
+        for(int i = 0; i < w; i++)
+        {
+            accumulator[j][i] = 0;
+        }
+    }
+    houghTransform(image, accumulator);
+    //coordinates(accumulator, 2*(rho+1), 181);
+    SDL_Surface *bimage = SDL_CreateRGBSurface(0, 180, 2*rho, 32, 0, 0, 0, 0);
+    for(int j = 0; j < h; j++)
+    {
+        for(int i = 0; i < w; i++)
+        {
+            int val = accumulator[j][i];
+            Uint32 pixel = SDL_MapRGB(bimage->format, val, val, val);
+            put_pixel(bimage, i, j, pixel);
+        }
+    }
+    SDL_Surface *n_image = display_image(image);
+    wait_for_keypressed();
+    SDL_FreeSurface(n_image);
+    SDL_FreeSurface(bimage);
 }
