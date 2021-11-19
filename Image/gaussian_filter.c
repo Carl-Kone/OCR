@@ -10,7 +10,7 @@ Uint8 maxval = 160;
 // updates the kernel with its exact values 
 void updateKernel()
 {
-    for(int i = 0; i < size_k; i++)
+    for(size_t i = 0; i < size_k; i++)
     {
         kernel[i] += kernel[i] * (float)1/159;
     }
@@ -33,8 +33,8 @@ int updatePixel(Uint8 image[])
     // multiplication of the values of the pixels with the kernel values
     for(size_t i = 0; i < size_k; i++)
     {
-        val = (image[i] * kernel[i]);
-        pixel += val;
+        var = (image[i] * kernel[i]);
+        pixel += var;
     }
     // average =  new value of pixel
     pixel = pixel/maxval;
