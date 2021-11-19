@@ -3,9 +3,11 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "pixel_operations.h"
+#include "display.h"
 #include "remove_color.h"
 #include "gaussian_filter.h"
 #include "rotate_image.h"
+#include "hough.h"
 
 void init_sdl()
 {
