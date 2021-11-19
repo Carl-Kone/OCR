@@ -40,6 +40,8 @@ int main(void)
     rotate_image(image,45); // rotates the image at angle 45 degrees
     wait_for_keypressed();
     SDL_FreeSurface(n_image);
+    HoughMain(image);
+    SDL_FreeSurface(n_image);
     SDL_FreeSurface(bimage);
     printf("la fonction va jusqu'au bout\n");
     return 0;
