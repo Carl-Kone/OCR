@@ -3,8 +3,11 @@
 #include <stdio.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "../display.h"
-#include "../preprocessing.h"
+#include "SDL/SDL_rotozoom.h"
+#include "../Image/pixel_operations.h"
+#include "../Image/hough_transform.h"
+#include "../Image/display.h"
+#include "../Image/preprocessing.h"
 
 typedef struct UserInterface
 {
@@ -16,15 +19,6 @@ typedef struct UserInterface
     GtkButton* result;
     GtkImage *display;
 }UserInterface;
-/*
-SDL_Surface *loadImage(char *path)
-{
-    SDL_Surface *image = NULL;
-    image = IMG_Load(path);
-    if (!image)
-        errx(3, "can't load %s: %s", path, IMG_GetError());
-    return image;
- }*/
 
 gboolean load_image(GtkWidget *widget, gpointer user_data)
 {
@@ -60,17 +54,32 @@ gboolean load_image(GtkWidget *widget, gpointer user_data)
 gboolean prepro(GtkWidget *widget, gpointer user_data)
 {
     UserInterface *ui = user_data;
-    const char *filename = preprocess(ui->image);
-    ui->image = loadImage((char*)filename);
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_scale(filename, 600, 400, TRUE, NULL);
-    gtk_image_set_from_pixbuf(ui->display,pixbuf);
-    return TRUE;
+    if(ui->image == NULL)
+        return load_image(widget, user_data);
+    else
+    {
+        const char *filename = preprocess(ui->image);
+        ui->image = loadImage((char*)filename);
+        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_scale(filename, 600, 400, TRUE, NULL);
+        gtk_image_set_from_pixbuf(ui->display,pixbuf);
+        return TRUE;
+    }
 }
 
 gboolean solve_sudoku(GtkWidget *widget, gpointer user_data)
 {
-    // solve sudoku
-    return TRUE;
+    UserInterface *ui = user_data;
+    if(ui->image == NULL)
+        return load_image(widget, user_data);
+    else
+    {
+        //gchar *pathh = "image_05.jpeg";
+        const char *filename = edge_detection(ui->image);
+        ui->image = loadImage((char*)filename);
+        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_scale(filename, 600, 400, TRUE, NULL);
+        gtk_image_set_from_pixbuf(ui->display,pixbuf);
+        return TRUE;
+    }
 }
 
 gboolean displayy(GtkWidget *widget, gpointer user_data)
@@ -110,7 +119,7 @@ int main(int argc, char *argv[])
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(load, "clicked", G_CALLBACK(load_image), &ui);
     g_signal_connect(pre, "clicked", G_CALLBACK(prepro), &ui);
-    g_signal_connect(solver, "clicked", G_CALLBACK(solve_sudoku), NULL);
+    g_signal_connect(solver, "clicked", G_CALLBACK(solve_sudoku), &ui);
     g_signal_connect(result, "clicked", G_CALLBACK(displayy), NULL);
 
     gtk_main();
