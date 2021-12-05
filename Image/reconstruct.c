@@ -5,24 +5,24 @@
 #include "../Solver/grid_read.h"
 #include "display.h"
 
-const int row1 = 9 ;
-const int row2 = 56;
-const int row3 = 101;
-const int row4 = 150;
-const int row5 = 196;
-const int row6 = 242;
-const int row7 = 291;
-const int row8 = 337;
-const int row9 = 383;
-const int col1 = 9;
-const int col2 = 57;
-const int col3 = 105;
-const int col4 = 156;
-const int col5 = 204;
-const int col6 = 252;
-const int col7 = 304;
-const int col8 = 351;
-const int col9 = 401;
+const int row1 = 14;
+const int row2 = 61;
+const int row3 = 106;
+const int row4 = 155;
+const int row5 = 201;
+const int row6 = 247;
+const int row7 = 296;
+const int row8 = 342;
+const int row9 = 388;
+const int col1 = 14;
+const int col2 = 62;
+const int col3 = 110;
+const int col4 = 161;
+const int col5 = 209;
+const int col6 = 257;
+const int col7 = 309;
+const int col8 = 355;
+const int col9 = 406;
 const int size_grid = 430;
 const int size_img = 42;
 
