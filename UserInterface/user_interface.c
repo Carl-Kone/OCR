@@ -100,6 +100,8 @@ gboolean gridDetect(GtkWidget *widget, gpointer user_data)
 
 gboolean split_func(GtkWidget *widget, gpointer user_data)
 {
+    UserInterface *ui = user_data;
+    splitting("final_square.bmp");
     return TRUE;
 }
 
