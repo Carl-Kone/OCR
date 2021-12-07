@@ -12,6 +12,134 @@ double Convert(int degree)
 {
 	return degree * (pi / 180);
 }
+struct triple
+{
+	int height;
+	int width;
+	int length;
+};
+
+int* verticalLength(int* length,int i,int j,int height,SDL_Surface* surface)
+{
+	int* result = malloc(sizeof(int) *100000);
+	for(int e = height - 1; e > j; e--)
+	{
+		Uint32 pixel = get_pixel(surface, i, e);
+            	Uint8 r,g,b;
+            	SDL_GetRGB(pixel, surface->format, &r, &g, &b);
+		if(r == 178)
+		{
+			*(result + *length) = e - j;
+			*length += 1;
+		}
+
+	}
+	return result;
+}
+
+
+int* horizontalLength(int* length,int i,int j,int width,SDL_Surface* surface)
+{	
+	int* result = malloc(sizeof(int) * 100000);
+	for(int e = width - 1; e > i; e--)
+	{
+		Uint32 pixel = get_pixel(surface, e, j);
+            	Uint8 r,g,b;
+            	SDL_GetRGB(pixel, surface->format, &r, &g, &b);
+		if(r == 178)
+		{
+			*(result + *length) = e - i;
+			*length += 1;
+		}
+
+	}
+	return result;
+}
+
+int maxLength(int* verticalLengths, int* horizontalLengths, int vL,int hL)
+{
+	int e = 0;
+	int e2 = 0;
+	int maxlength = 0;
+	while(e < vL)
+	{
+		while(e2 < hL)
+		{
+			if((*(verticalLengths+e))+10 >= *(horizontalLengths+e2) && (*(verticalLengths+e))-10 <= *(horizontalLengths+e2))
+			{
+				int vLength = *(verticalLengths+e);
+				if(maxlength < vLength)
+				{
+					maxlength=(vLength);
+				}
+			}
+			e2+=1;
+		}
+		e2 =0;
+		e +=1;
+	}
+	return maxlength;
+}
+
+void squaredetect()
+{
+	SDL_Surface* surface = IMG_Load("../UI/intersection.bmp");
+	int width = surface->w;
+	int height = surface->h;
+	struct triple sqrmax;
+	sqrmax.height = 0;
+	sqrmax.width = 0;
+	sqrmax.length = 0;
+	for(int i = 0; i < width/2; i++)
+	{
+		for(int j = 0 ; j < height/2;j++)
+		{
+			Uint32 pixel = get_pixel(surface, i, j);
+            		Uint8 r,g,b;
+            		SDL_GetRGB(pixel, surface->format, &r, &g, &b);
+			if(r == 178)
+			{
+				int vL = 0;
+				int hL= 0;
+				int *verticalLengths = verticalLength(&vL,i,j,height,surface);
+				int *horizontalLengths = horizontalLength(&hL,i,j,width,surface);
+				int maxlength = maxLength(verticalLengths, horizontalLengths, vL,hL);
+				if(maxlength != 0)
+				{
+					struct triple coord;
+					coord.height = j;
+					coord.width = i;
+					coord.length = maxlength;
+					if(coord.length > sqrmax.length)
+					{
+						sqrmax.height = coord.height;
+						sqrmax.width = coord.width;
+						sqrmax.length = coord.length;
+						//printf("hL = %i\n,vL = %i\n",hL,vL);
+					}
+				}
+				free(verticalLengths);
+				free(horizontalLengths);
+			}
+
+		}
+	}
+	if(sqrmax.length != 0)
+	{
+		SDL_Surface* image = IMG_Load("intersection.bmp");
+		SDL_Surface* imagedest = SDL_CreateRGBSurface(0,sqrmax.length,sqrmax.length,32,0,0,0,0);
+		SDL_Rect leftR = {sqrmax.width,sqrmax.height, sqrmax.length, sqrmax.length};
+		SDL_BlitSurface(image,&leftR,imagedest,NULL);
+		SDL_SaveBMP(imagedest,"final_square.bmp");
+		SDL_FreeSurface(imagedest);
+		SDL_FreeSurface(image);
+
+	}
+	SDL_FreeSurface(surface);
+
+}
+
+
 
 const char *edge_detection(SDL_Surface* image)
 {
@@ -169,7 +297,7 @@ const char *edge_detection(SDL_Surface* image)
                 }
 
             //printf("this : %i\n", A[i][j]);
-            if (A[indexk][j] > 300)
+            if (A[indexk][j] >500)
             {
                     /*for (int x = 0; x < width; x++)
                     {
@@ -270,14 +398,14 @@ const char *edge_detection(SDL_Surface* image)
 
     
     SDL_SaveBMP(houghSpace, "houghSpace.bmp");
-    SDL_SaveBMP(image, "muchachos.bmp");
+    SDL_SaveBMP(image, "mmm.bmp");
     SDL_SaveBMP(intersection, "intersection.bmp");
 
     SDL_FreeSurface(intersection);
     SDL_FreeSurface(houghSpace);
     SDL_FreeSurface(image);
 
-    return "muchachos.bmp";
+    return "mmm.bmp";
 }
 
 

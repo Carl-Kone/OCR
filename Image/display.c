@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
+#include "display.h"
 
 SDL_Surface *loadImage(char *path)
 {

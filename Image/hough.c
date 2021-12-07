@@ -174,6 +174,10 @@ void DrawLines(SDL_Surface* image)
                             put_pixel(image, n, y2, pixel);
                         }
                     }
+                printf("y2 - y1 = %d\n", y2-y1);
+                printf("x2 - x1 = %d\n", x2-x1);
+                printf("origin = %f\n", origin);
+                printf("slope = %f\n", slope);
             }
         }
     }
@@ -200,7 +204,6 @@ void HoughMain(SDL_Surface* image)
     houghTransform(image, accumulator);
     DrawLines(image);
     printf("printed lines\n");
-    /*
     SDL_Surface *bimage = SDL_CreateRGBSurface(0, 180, 2*rho, 32, 0, 0, 0, 0);
     int val;
     Uint32 pixel;
@@ -218,8 +221,10 @@ void HoughMain(SDL_Surface* image)
     wait_for_keypressed();
     SDL_FreeSurface(n_image);
     SDL_FreeSurface(bimage);
-    */
     SDL_Surface *biimage = display_image(image);
     wait_for_keypressed();
     SDL_FreeSurface(biimage);
 }
+
+// https://towardsdatascience.com/canny-edge-detection-step-by-step-in-python-computer-vision-b49c3a2d8123
+// https://docs.opencv.org/3.4/da/d22/tutorial_py_canny.html

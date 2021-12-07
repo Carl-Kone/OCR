@@ -16,7 +16,7 @@
 const char* grid_read(FILE *fptr)
 {
     
-    static char res[110] =""; // static to maintain the variable out of the function
+    static char res[111] =""; // static to maintain the variable out of the function
     char temp[13];
     for(int i = 0; i < 11; i++) // Reads the file line by line
     {
@@ -25,4 +25,14 @@ const char* grid_read(FILE *fptr)
     return res;
 }
 
-
+const char* grid_read2(FILE *fptr)
+{
+    
+    static char res[111] =""; // static to maintain the variable out of the function
+    char temp[13];
+    for(int i = 0; i < 11; i++) // Reads the file line by line
+    {
+        strcat(res, fgets(temp, sizeof(temp), fptr));
+    }
+    return res;
+}

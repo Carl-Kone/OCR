@@ -2,7 +2,7 @@
 #define GAUSSIAN_FILTER_H
 
 #include <stdlib.h>
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 void updateKernel();
 int updatePixel(Uint8 image[]);

@@ -5,5 +5,6 @@
 
 const char *edge_detection(SDL_Surface *image);
 const char *edge_detection2(SDL_Surface *image);
+void squaredetect();
 
 #endif

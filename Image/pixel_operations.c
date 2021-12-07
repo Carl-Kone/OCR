@@ -75,21 +75,5 @@ void update_surface(SDL_Surface* screen, SDL_Surface* image)
     if (SDL_BlitSurface(image, NULL, screen, NULL) < 0)
         warnx("BlitSurface error: %s\n", SDL_GetError());
                     
-    DL_UpdateRect(screen, 0, 0, image->w, image->h);
+    SDL_UpdateRect(screen, 0, 0, image->w, image->h);
 }
-
-// get RGB values pixel :
-// Uint8 r, g, b;
-// SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
-
-// get pixel value fro RGB values :
-// Uint32 pixel = SDL_MapRGB(image_surface->format, r, g, b);
-
-// width image : 
-// int width = image_surface->w;
-
-// height image :
-// int height = image_surface->h;
-
-// redraw surfaces :
-// update_surface(screen_image, surface_image);

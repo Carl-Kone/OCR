@@ -10,13 +10,10 @@ size_t size_ke = 9;
 int gradient(int x, int y)
 {
     double a = sqrt(x * x + y * y);
-    //printf("sqrt = %lf\n", a);
-    if (a > 255)
-        return 255;
     return (int) a;
 }
 
-int updatePixel2(Uint8 pixels[])
+int updatePixel2(int pixels[])
 {
     int x = 0;
     int y = 0;
@@ -37,7 +34,7 @@ void Sfilter(SDL_Surface* image, SDL_Surface* n_image)
     int width = image->w;
     int height = image->h;
     Uint32 pixel;
-    Uint8 pixels[9];
+    int pixels[9];
     Uint8 r, g, b;
     int i;
     for (int y = 1; y < height - 1; y++)

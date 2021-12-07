@@ -4,6 +4,7 @@
 #include "SDL/SDL_image.h"
 #include "../Solver/grid_read.h"
 #include "display.h"
+#include "reconstruct.h"
 
 const int row1 = 14;
 const int row2 = 61;
@@ -193,8 +194,7 @@ const char *file_image(char *path1, char *path2)
     SDL_FreeSurface(grid);
     return path3;
 }
-
-
+/*
 int main()
 {
     char *path1 = "given";
@@ -202,3 +202,4 @@ int main()
     const char *result = file_image(path1, path2);
     printf("%s\n", result);
 }
+*/
